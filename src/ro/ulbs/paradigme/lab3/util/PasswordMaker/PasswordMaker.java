@@ -43,6 +43,9 @@ public class PasswordMaker extends StringRandomizer {
         PasswordMaker pm2 = PasswordMaker.getInstance("Rolando");
         System.out.println("Parola pt rolando: " + pm2.getPassword());
 
+        PasswordMaker pm3 = PasswordMaker.getInstance("Dis");
+        System.out.println("Parola pt dis: " + pm3.getPassword());
+
         System.out.println("Metoda getInstance() a fost accesată de " + PasswordMaker.getInstanceAccessCount() + " ori.");
     }
 }
