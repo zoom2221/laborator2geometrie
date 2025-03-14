@@ -20,10 +20,10 @@ public class Form {
 
     public static void main(String[] args) {
 
-        Form form1 = new Form("Form1");
-        Form form2 = new Form("Form2");
-        Form form3 = new Form("Form3");
+        Form form1 = new Form("1");
+        Form form2 = new Form("2");
+        Form form3 = new Form("3");
 
-        System.out.println("Numărul total de instanțe create: " + Form.getCounter());
+        System.out.println("contorul " + Form.getCounter());
     }
 }
