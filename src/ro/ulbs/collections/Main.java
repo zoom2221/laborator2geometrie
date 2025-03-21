@@ -1,56 +1,65 @@
 package ro.ulbs.collections;
 
+import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Main  {
     public static void main(String[] args) {
-        // Inițializare liste și set
-        List<Integer> x = new ArrayList<>();
-        List<Integer> y = new ArrayList<>();
-        List<Integer> xPlusY = new ArrayList<>();
-        Set<Integer> zSet = new TreeSet<>();
-        List<Integer> xMinusY = new ArrayList<>();
-        int p = 4;
-        List<Integer> xPlusYLimitedByP = new ArrayList<>();
+
+        List<Student> students = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+
+                String[] parts = line.split(" ");
+                String firstName = parts[0];
+                String lastName = parts[1];
+                String group = parts[2];
+                List<Integer> grades = new ArrayList<>();
+
+                for (int i = 3; i < parts.length; i++) {
+                    grades.add(Integer.parseInt(parts[i]));
+                }
 
 
-        Random rand = new Random();
+                Student student = new Student(firstName, lastName, group, grades);
 
 
-        for (int i = 0; i < 5; i++) {
-            x.add(rand.nextInt(11)); // Numere între 0 și 10
+                students.add(student);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        for (int i = 0; i < 7; i++) {
-            y.add(rand.nextInt(11)); // Numere între 0 și 10
+
+
+        students.sort(Comparator.comparing(Student::getGroup)
+                .thenComparing(Student::getLastName)
+                .thenComparing(Student::getFirstName));
+
+        System.out.println("Studenți ordonați alfabetic, pe grupe:");
+        students.forEach(System.out::println);
+
+
+        students.sort(Comparator.comparing(Student::calculateAverage).reversed());
+
+        System.out.println("\nStudenți ordonați descrescător după medii:");
+        students.forEach(System.out::println);
+
+
+        students.sort(Comparator.comparing(Student::countFailures));
+
+        System.out.println("\nStudenți ordonați crescător după numărul de restanțe:");
+        students.forEach(System.out::println);
+
+
+        Map<Student, Integer> studentMap = new HashMap<>();
+        for (Student student : students) {
+            studentMap.put(student, studentMap.getOrDefault(student, 0) + 1);
         }
 
 
-        Collections.sort(x);
-        Collections.sort(y);
-
-
-        xPlusY.addAll(x);
-        xPlusY.addAll(y);
-        Collections.sort(xPlusY);
-
-
-        zSet.addAll(x);
-        zSet.retainAll(y);
-        System.out.println("zSet (comune): " + zSet);
-
-
-        xMinusY.addAll(x);
-        xMinusY.removeAll(y);
-        System.out.println("xMinusY (din x dar nu în y): " + xMinusY);
-
-
-        xPlusYLimitedByP.addAll(x);
-        xPlusYLimitedByP.addAll(y);
-        xPlusYLimitedByP.removeIf(e -> e > p);
-        Collections.sort(xPlusYLimitedByP);
-
-
-        System.out.println("xPlusY (toate elementele): " + xPlusY);
-        System.out.println("xPlusYLimitedByP (elementele <= p): " + xPlusYLimitedByP);
+        System.out.println("\nde cate ori a aparut studentul:");
+        studentMap.forEach((student, count) -> System.out.println(student + ", Apariții: " + count));
     }
 }
